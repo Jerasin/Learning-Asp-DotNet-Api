@@ -11,11 +11,14 @@ public class UserController : ControllerBase
     private readonly ILogger<UserController> _logger;
     private readonly IDocumentCollection<User> _users;
 
-    public UserController(ILogger<UserController> logger)
+    private readonly DBContext _dbContext;
+
+    public UserController(ILogger<UserController> logger, DBContext dbContext)
     {
         _logger = logger;
         var store = new DataStore("db.json");
         _users = store.GetCollection<User>();
+        _dbContext = dbContext;
     }
 
     [HttpPost]
@@ -27,7 +30,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public IEnumerable<User> Get()
     {
-        return _users.AsQueryable().ToList();
+        return _dbContext.User.ToList();
     }
 
     [HttpGet("{id:int}")]

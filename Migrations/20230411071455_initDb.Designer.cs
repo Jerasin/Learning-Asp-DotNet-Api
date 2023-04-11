@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace RestApiSample.Migrations
 {
-    [DbContext(typeof(UserContext))]
-    [Migration("20230410144820_UserTable")]
-    partial class UserTable
+    [DbContext(typeof(DBContext))]
+    [Migration("20230411071455_initDb")]
+    partial class initDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

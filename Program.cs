@@ -1,11 +1,10 @@
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // https://stackoverflow.com/questions/66720614/cannot-convert-from-string-to-microsoft-entityframeworkcore-serverversion
-builder.Services.AddDbContextPool<UserContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("RestSampleDatabase"), new MySqlServerVersion(new Version(8, 0, 11))));
+builder.Services.AddDbContext<DBContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("Default"), new MySqlServerVersion(new Version(8, 0, 11))));
 
 // Add services to the container.
 
