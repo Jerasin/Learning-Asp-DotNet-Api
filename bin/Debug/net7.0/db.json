@@ -2,15 +2,15 @@
   "user": [
     {
       "id": 1,
-      "firstName": "xxxx",
-      "lastName": "xxx",
-      "age": 1150
+      "name": null
     },
     {
       "id": 2,
-      "firstName": "test2",
-      "lastName": "test2",
-      "age": 20
+      "name": null
+    },
+    {
+      "id": 3,
+      "name": "test1"
     }
   ]
 }

@@ -1,6 +1,8 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
 version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
 
 services:
   api:
@@ -10,6 +12,14 @@ services:
     container_name: api
     ports:
       - 5058:5058
+    depends_on:
+       db:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=api;Uid=api;Pwd=123456;
+    networks:
+      - dev
+
 
   db:
     build:
@@ -31,12 +41,26 @@ services:
       interval: 10s
       timeout: 30s
       retries: 3
+    networks:
+      - dev
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - dev
 
 volumes:
   db-data:
+
+
+
+
+
+
+
+
+
+

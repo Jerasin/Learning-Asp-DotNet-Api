@@ -1,3 +1,4 @@
+using System.Net;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,9 @@ public class UserController : ControllerBase
     private readonly ILogger<UserController> _logger;
     private readonly IDocumentCollection<User> _users;
 
-    private readonly DBContext _dbContext;
+    private readonly ApiDbContext _dbContext;
 
-    public UserController(ILogger<UserController> logger, DBContext dbContext)
+    public UserController(ILogger<UserController> logger, ApiDbContext dbContext)
     {
         _logger = logger;
         var store = new DataStore("db.json");
@@ -22,9 +23,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public void Post([FromBody] User user)
+    public HttpStatusCode Post([FromBody] User user)
     {
-        _users.InsertOne(user);
+        // _users.InsertOne(user);
+        _dbContext.Add(user);
+        _dbContext.SaveChanges();
+
+        return HttpStatusCode.Created;
     }
 
     [HttpGet]
