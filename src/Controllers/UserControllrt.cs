@@ -1,6 +1,8 @@
 using System.Net;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Mvc;
+using Models.User;
+using Services.UserService;
 
 namespace RestApiSample.Controllers;
 
@@ -11,37 +13,42 @@ public class UserController : ControllerBase
 
     private readonly ILogger<UserController> _logger;
     private readonly IDocumentCollection<User> _users;
+    private readonly UserService _userService;
 
-    private readonly ApiDbContext _dbContext;
 
-    public UserController(ILogger<UserController> logger, ApiDbContext dbContext)
+    public UserController(ILogger<UserController> logger, UserService userService)
     {
         _logger = logger;
         var store = new DataStore("db.json");
         _users = store.GetCollection<User>();
-        _dbContext = dbContext;
+        _userService = userService;
+
+
     }
 
     [HttpPost]
     public HttpStatusCode Post([FromBody] User user)
     {
         // _users.InsertOne(user);
-        _dbContext.Add(user);
-        _dbContext.SaveChanges();
+        _userService.createUser(user);
 
         return HttpStatusCode.Created;
     }
 
     [HttpGet]
-    public IEnumerable<User> Get()
+    public IActionResult Get()
     {
-        return _dbContext.User.ToList();
+        var user = _userService.getUsers();
+
+        return Ok(user);
     }
 
     [HttpGet("{id:int}")]
     public User GetById(int id)
     {
-        return _users.AsQueryable().FirstOrDefault(user => user.id == id);
+        // return _users.AsQueryable().FirstOrDefault(user => user.id == id);
+        return _userService.getUser(id);
+
     }
 
     [HttpPut("{id:int}")]

@@ -12,18 +12,15 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+WORKDIR /app
 COPY ["RestApiSample.csproj", "./"]
 RUN dotnet restore "RestApiSample.csproj"
 COPY . .
-WORKDIR "/src/."
 RUN dotnet build "RestApiSample.csproj" -c Release -o /app/build
-
-FROM build AS publish
 RUN dotnet publish "RestApiSample.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ENTRYPOINT ["dotnet","watch", "run","--urls=http://+:5058"]
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "RestApiSample.dll"]
+
+
+

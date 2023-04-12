@@ -20,7 +20,15 @@ namespace RestApiSample.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                    Email = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Address = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Role = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Active = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
