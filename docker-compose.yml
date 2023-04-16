@@ -28,6 +28,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.db
     container_name: db
+    command: --lower_case_table_names=1
     environment:
       MYSQL_DATABASE: api
       MYSQL_USER: api

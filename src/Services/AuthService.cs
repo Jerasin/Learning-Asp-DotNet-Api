@@ -5,6 +5,7 @@ using AuthenticationPlugin;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RestApiSample.Interfaces;
+using RestApiSample.Models;
 using RestApiSample.Services;
 
 namespace RestApiSample.Services
@@ -36,8 +37,16 @@ namespace RestApiSample.Services
                 return null;
             }
 
+            var jwt = createToken(getUser);
+
+            return new { token = jwt };
+        }
+
+
+        private string createToken(User user)
+        {
             var claims = new Claim[]{
-            new Claim("id",getUser.id.ToString()),
+            new Claim("id",user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email,user.Email),
             new Claim(JwtRegisteredClaimNames.Iss,"localhost.com"),
             new Claim(JwtRegisteredClaimNames.Aud,"localhost.com"),
@@ -51,11 +60,8 @@ namespace RestApiSample.Services
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-
-            return new { token = jwt };
+            return jwt;
         }
-
-
     }
 
 

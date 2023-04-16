@@ -6,12 +6,12 @@ namespace RestApiSample.Models
 {
     [Index(nameof(Email), IsUnique = true)]
     [Index(nameof(Password), IsUnique = true)]
-    public class User
+    public class User : Base
     {
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(550)]
         [EmailAddress(ErrorMessage = "The email address is not valid")]
@@ -32,6 +32,6 @@ namespace RestApiSample.Models
 
         public bool Active { get; set; } = true;
 
-        public string CreatedAt { get; set; } = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
     }
 }

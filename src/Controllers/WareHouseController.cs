@@ -9,37 +9,34 @@ namespace RestApiSample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : ControllerBase
+public class WareHouseController : ControllerBase
 {
 
-    private readonly ILogger<UserController> _logger;
-    private readonly IDocumentCollection<User> _users;
-    private readonly UserService _userService;
+
+    private readonly WareHouseService _wareHouseService;
 
 
-    public UserController(ILogger<UserController> logger, UserService userService)
+    public WareHouseController(WareHouseService wareHouseService)
     {
-        _logger = logger;
-        var store = new DataStore("db.json");
-        _users = store.GetCollection<User>();
-        _userService = userService;
+
+        _wareHouseService = wareHouseService;
     }
 
     [HttpPost]
     [Authorize]
-    public IActionResult Post([FromBody] User user)
+    public IActionResult Post([FromBody] WareHouse wareHouse)
     {
         // _users.InsertOne(user);
-        _userService.createUser(user);
+        _wareHouseService.createWareHouse(wareHouse);
 
-        return Created("", user);
+        return Created("", wareHouse);
     }
 
     [HttpGet]
     [Authorize]
     public Object Get()
     {
-        var users = _userService.getUsers();
+        var wareHouses = _wareHouseService.getWareHouses();
 
         // var test = new
         // {
@@ -48,7 +45,7 @@ public class UserController : ControllerBase
 
         // return test;
 
-        return Ok(users);
+        return Ok(wareHouses);
     }
 
     [HttpGet("{id:int}")]
@@ -56,19 +53,19 @@ public class UserController : ControllerBase
     public IActionResult GetById(int id)
     {
         // return _users.AsQueryable().FirstOrDefault(user => user.id == id);
-        var user = _userService.getUser(id);
+        var wareHouse = _wareHouseService.getWareHouse(id);
 
-        if (user is null)
+        if (wareHouse is null)
         {
-            return NotFound(user);
+            return NotFound(wareHouse);
         }
 
-        return Ok(user);
+        return Ok(wareHouse);
     }
 
     [HttpPut("{id:int}")]
     [Authorize]
-    public async Task<IActionResult> Put(int id, [FromBody] User user)
+    public async Task<IActionResult> Put(int id, [FromBody] WareHouse wareHouse)
     {
         // var findUser = _users.AsQueryable().FirstOrDefault(user => user.id == id);
 
@@ -80,16 +77,16 @@ public class UserController : ControllerBase
         // return findUser;
 
 
-        await _userService.updateUser(id, user);
+        await _wareHouseService.updateWareHouse(id, wareHouse);
 
-        return Ok(user);
+        return Ok(wareHouse);
     }
 
     [HttpDelete("{id:int}")]
     [Authorize]
     public async Task<IActionResult> delete(int id)
     {
-        var deleteUser = await _userService.deleteUser(id);
+        var deleteUser = await _wareHouseService.deleteWareHouse(id);
 
         if (deleteUser is null)
         {
@@ -97,5 +94,14 @@ public class UserController : ControllerBase
         }
 
         return Ok();
+    }
+
+    [HttpGet("product")]
+    [Authorize]
+    public IActionResult wareHouseProducts()
+    {
+        var wareHouseProducts = _wareHouseService.WareHouseProducts();
+
+        return Ok(wareHouseProducts);
     }
 }

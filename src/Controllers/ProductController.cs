@@ -9,37 +9,34 @@ namespace RestApiSample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : ControllerBase
+public class ProductController : ControllerBase
 {
 
     private readonly ILogger<UserController> _logger;
-    private readonly IDocumentCollection<User> _users;
-    private readonly UserService _userService;
+    private readonly ProductService _productService;
 
 
-    public UserController(ILogger<UserController> logger, UserService userService)
+    public ProductController(ILogger<UserController> logger, ProductService productService)
     {
         _logger = logger;
-        var store = new DataStore("db.json");
-        _users = store.GetCollection<User>();
-        _userService = userService;
+        _productService = productService;
     }
 
     [HttpPost]
     [Authorize]
-    public IActionResult Post([FromBody] User user)
+    public IActionResult Post([FromBody] Product product)
     {
         // _users.InsertOne(user);
-        _userService.createUser(user);
+        _productService.createProduct(product);
 
-        return Created("", user);
+        return Created("", product);
     }
 
     [HttpGet]
     [Authorize]
     public Object Get()
     {
-        var users = _userService.getUsers();
+        var products = _productService.getProducts();
 
         // var test = new
         // {
@@ -48,27 +45,26 @@ public class UserController : ControllerBase
 
         // return test;
 
-        return Ok(users);
+        return Ok(products);
     }
 
     [HttpGet("{id:int}")]
     [Authorize]
     public IActionResult GetById(int id)
     {
-        // return _users.AsQueryable().FirstOrDefault(user => user.id == id);
-        var user = _userService.getUser(id);
+        var product = _productService.getProduct(id);
 
-        if (user is null)
+        if (product is null)
         {
-            return NotFound(user);
+            return NotFound(product);
         }
 
-        return Ok(user);
+        return Ok(product);
     }
 
     [HttpPut("{id:int}")]
     [Authorize]
-    public async Task<IActionResult> Put(int id, [FromBody] User user)
+    public async Task<IActionResult> Put(int id, [FromBody] Product product)
     {
         // var findUser = _users.AsQueryable().FirstOrDefault(user => user.id == id);
 
@@ -80,16 +76,16 @@ public class UserController : ControllerBase
         // return findUser;
 
 
-        await _userService.updateUser(id, user);
+        await _productService.updateProduct(id, product);
 
-        return Ok(user);
+        return Ok(product);
     }
 
     [HttpDelete("{id:int}")]
     [Authorize]
     public async Task<IActionResult> delete(int id)
     {
-        var deleteUser = await _userService.deleteUser(id);
+        var deleteUser = await _productService.deleteProduct(id);
 
         if (deleteUser is null)
         {

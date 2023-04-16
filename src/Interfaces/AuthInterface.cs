@@ -13,6 +13,8 @@ namespace RestApiSample.Interfaces
     {
         public IActionResult test([FromBody] ILogin user);
 
+        public Object? createToken();
+
     }
 
 }

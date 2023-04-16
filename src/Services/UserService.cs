@@ -24,13 +24,14 @@ namespace RestApiSample.Services
                 Password = "123456",
                 Address = "admin location",
                 Role = "admin",
+                CreatedBy = "admin"
             };
 
             var getUser = _dbContext.User.FirstOrDefault(u => u.Email == user.Email);
 
             if (getUser is null)
             {
-                Console.WriteLine("getUser is null");
+                Console.WriteLine("getUser is null = {0}", user.CreatedBy);
                 createUser(user);
 
             }
@@ -43,16 +44,19 @@ namespace RestApiSample.Services
 
             string hashed = SecurePasswordHasherHelper.Hash(user.Password);
 
-            var createUser = new User
-            {
-                Email = user.Email,
-                Password = hashed,
-                Role = "user",
-                Address = "test"
-            };
+            user.Password = hashed;
+
+            // var createUser = new User
+            // {
+            //     Email = user.Email,
+            //     Password = hashed,
+            //     Role = "user",
+            //     Address = "test",
+            //     CreatedBy = "admin"
+            // };
 
 
-            _dbContext.Add(createUser);
+            _dbContext.Add(user);
             var saveUser = _dbContext.SaveChanges();
             return saveUser;
         }
@@ -65,7 +69,7 @@ namespace RestApiSample.Services
 
         public User? getUser(int id)
         {
-            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.id == id);
+            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.Id == id);
 
             return result;
         }
@@ -84,7 +88,7 @@ namespace RestApiSample.Services
 
         public async Task<int?> updateUser(int id, User user)
         {
-            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.id == id);
+            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.Id == id);
 
             if (result is null)
             {
@@ -103,7 +107,7 @@ namespace RestApiSample.Services
 
         public async Task<int?> deleteUser(int id)
         {
-            var user = _dbContext.User.FirstOrDefault(user => user.id == id);
+            var user = _dbContext.User.FirstOrDefault(user => user.Id == id);
 
             if (user is null)
             {
@@ -113,6 +117,7 @@ namespace RestApiSample.Services
             _dbContext.Remove(user);
             return await _dbContext.SaveChangesAsync();
         }
+
     }
 
 

@@ -34,6 +34,8 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<ProductService, ProductService>();
+builder.Services.AddScoped<WareHouseService, WareHouseService>();
 builder.Services.AddScoped<AuthCustomService, AuthCustomService>();
 
 Console.WriteLine("configuration [{0}]", configuration["AppSettings:Tokens:Issuer"]);
@@ -90,11 +92,15 @@ if (app.Environment.IsDevelopment())
             Console.WriteLine("Not Have Migrate");
         }
 
-        var userService = services.GetService<UserService>();
+        var userService = services.GetService<UserService>()!;
+        var productService = services.GetService<ProductService>()!;
+        var wareHouseService = services.GetService<WareHouseService>()!;
 
         try
         {
-            userService?.initUserAdmin();
+            userService.initUserAdmin();
+            productService.initProduct();
+            wareHouseService.initWareHouse();
         }
         catch (Exception error)
         {

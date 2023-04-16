@@ -20,7 +20,7 @@ namespace RestApiSample.Migrations
 
             modelBuilder.Entity("RestApiSample.Models.Product", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -31,6 +31,14 @@ namespace RestApiSample.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(550)
+                        .HasColumnType("varchar(550)");
+
+                    b.Property<string>("Img")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(550)
@@ -39,10 +47,13 @@ namespace RestApiSample.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("img")
+                    b.Property<string>("UpdatedAt")
                         .HasColumnType("longtext");
 
-                    b.HasKey("id");
+                    b.Property<string>("UpdatedByAt")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Active");
 
@@ -51,7 +62,7 @@ namespace RestApiSample.Migrations
 
             modelBuilder.Entity("RestApiSample.Models.User", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -66,6 +77,11 @@ namespace RestApiSample.Migrations
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(550)
+                        .HasColumnType("varchar(550)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -82,7 +98,13 @@ namespace RestApiSample.Migrations
                         .HasMaxLength(550)
                         .HasColumnType("varchar(550)");
 
-                    b.HasKey("id");
+                    b.Property<string>("UpdatedAt")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UpdatedByAt")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -95,24 +117,34 @@ namespace RestApiSample.Migrations
 
             modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Amount")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(550)
+                        .HasColumnType("varchar(550)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.Property<string>("UpdatedAt")
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.Property<string>("UpdatedByAt")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("WareHouse");
                 });
@@ -120,18 +152,12 @@ namespace RestApiSample.Migrations
             modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
                 {
                     b.HasOne("RestApiSample.Models.Product", "Product")
-                        .WithOne("WareHouse")
-                        .HasForeignKey("RestApiSample.Models.WareHouse", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("RestApiSample.Models.Product", b =>
-                {
-                    b.Navigation("WareHouse")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
