@@ -19,6 +19,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=db;Database=api;Uid=api;Pwd=123456;
     networks:
       - dev
+    volumes:
+      - ./src:/app/src
 
 
   db:

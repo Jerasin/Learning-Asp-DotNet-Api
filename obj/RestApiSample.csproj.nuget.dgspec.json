@@ -38,9 +38,17 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AspNetCore.Authentication.Plugin": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "JsonFlatFileDataStore": {
               "target": "Package",
               "version": "[2.4.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
@@ -62,10 +70,6 @@
               "target": "Package",
               "version": "[8.0.22, )"
             },
-            "MySql.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[7.0.0, )"
@@ -73,6 +77,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[7.0.6, )"
             }
           },
           "imports": [
