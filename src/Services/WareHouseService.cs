@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using RestApiSample.Models;
 
 namespace RestApiSample.Services
@@ -6,10 +7,12 @@ namespace RestApiSample.Services
     {
 
         private readonly ApiDbContext _dbContext;
+        private readonly FormatResponseService _formatResponseService;
 
-        public WareHouseService(ApiDbContext apiDbContext)
+        public WareHouseService(ApiDbContext apiDbContext, FormatResponseService formatResponseService)
         {
             _dbContext = apiDbContext;
+            _formatResponseService = formatResponseService;
         }
 
         public void initWareHouse()
@@ -44,10 +47,13 @@ namespace RestApiSample.Services
         }
 
 
-        public List<WareHouse> getWareHouses()
+        public FormatResponseService getWareHouses()
         {
 
-            return _dbContext.WareHouse.ToList();
+            var wareHouse = _dbContext.WareHouse.ToList();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = wareHouse;
+            return _formatResponseService;
         }
 
         public WareHouse? getWareHouse(int id)
@@ -98,13 +104,23 @@ namespace RestApiSample.Services
                          from m in Products.DefaultIfEmpty()
                          select new
                          {
-                             id = wareHouse.Id,
+                             Id = wareHouse.Id,
                              ProductId = wareHouse.ProductId,
                              ProductName = m.Name,
-                             ProductActive = m.Active
+                             ProductActive = m.Active,
+                             ProductPrice = m.Price,
+                             ProductAmount = wareHouse.Amount
                          };
 
             return result;
         }
+
+        public List<WareHouse>? ContextWareHouseProducts()
+        {
+            var result = _dbContext.WareHouse.Include(i => i.Product).ToList();
+
+            return result;
+        }
+
     }
 }

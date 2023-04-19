@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace RestApiSample.Models
 {
     [Index(nameof(ProductId))]
+    [Table("warehouse")]
     public class WareHouse : Base
     {
 
@@ -12,12 +13,12 @@ namespace RestApiSample.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey("Product")]
-        public int ProductId { get; set; }
-
         [Required]
         public int Amount { get; set; }
 
         public virtual Product Product { get; set; } = null!;
+        public int ProductId { get; set; }
+
+
     }
 }

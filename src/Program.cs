@@ -7,6 +7,7 @@ using RestApiSample.Models;
 using RestApiSample.Services;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -37,6 +38,8 @@ builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<ProductService, ProductService>();
 builder.Services.AddScoped<WareHouseService, WareHouseService>();
 builder.Services.AddScoped<AuthCustomService, AuthCustomService>();
+builder.Services.AddScoped<FormatResponseService, FormatResponseService>();
+
 
 Console.WriteLine("configuration [{0}]", configuration["AppSettings:Tokens:Issuer"]);
 
@@ -118,6 +121,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "src/wwwroot/upload")),
+    RequestPath = "/images"
+});
 
 app.Run();
 

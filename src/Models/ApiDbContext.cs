@@ -8,10 +8,13 @@ namespace RestApiSample.Models
     {
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-
-        }
+        // protected override void OnModelCreating(ModelBuilder builder)
+        // {
+        //     builder.Entity<Product>()
+        //                 .HasOne<WareHouse>(product => product.WareHouse)
+        //                 .WithOne(wareHouse => wareHouse.Product)
+        //                 .HasForeignKey<WareHouse>(wareHouse => wareHouse.ProductId);
+        // }
 
 
         public DbSet<User> User { get; set; } = null!;

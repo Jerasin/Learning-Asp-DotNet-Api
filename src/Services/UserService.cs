@@ -23,7 +23,7 @@ namespace RestApiSample.Services
                 Email = "admin@gmail.com",
                 Password = "123456",
                 Address = "admin location",
-                Role = "admin",
+                Role = Roles.Admin.ToString(),
                 CreatedBy = "admin"
             };
 

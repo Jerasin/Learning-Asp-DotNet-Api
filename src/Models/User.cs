@@ -4,8 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RestApiSample.Models
 {
+    [Flags]
+    public enum Roles
+    {
+        Admin = 1,
+        User = 2
+    }
+
     [Index(nameof(Email), IsUnique = true)]
     [Index(nameof(Password), IsUnique = true)]
+    [Table("users")]
     public class User : Base
     {
 
@@ -28,7 +36,7 @@ namespace RestApiSample.Models
 
         [StringLength(550)]
         [Required]
-        public string Role { get; set; } = string.Empty;
+        public string Role { get; set; } = null!;
 
         public bool Active { get; set; } = true;
 

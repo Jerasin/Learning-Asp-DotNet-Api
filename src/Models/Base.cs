@@ -12,6 +12,6 @@ namespace RestApiSample.Models
 
         public string? UpdatedAt { get; set; }
 
-        public string? UpdatedByAt { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }

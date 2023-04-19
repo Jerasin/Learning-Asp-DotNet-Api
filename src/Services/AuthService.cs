@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RestApiSample.Interfaces;
 using RestApiSample.Models;
-using RestApiSample.Services;
+
 
 namespace RestApiSample.Services
 {
@@ -16,6 +16,8 @@ namespace RestApiSample.Services
 
         private readonly UserService _userService;
         private IConfiguration _configuration;
+
+
 
         public AuthCustomService(UserService userService, IConfiguration configuration)
         {
@@ -47,6 +49,7 @@ namespace RestApiSample.Services
         {
             var claims = new Claim[]{
             new Claim("id",user.Id.ToString()),
+             new Claim("role",user.Role),
             new Claim(JwtRegisteredClaimNames.Email,user.Email),
             new Claim(JwtRegisteredClaimNames.Iss,"localhost.com"),
             new Claim(JwtRegisteredClaimNames.Aud,"localhost.com"),
@@ -62,6 +65,8 @@ namespace RestApiSample.Services
 
             return jwt;
         }
+
+
     }
 
 

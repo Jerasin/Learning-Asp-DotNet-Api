@@ -50,14 +50,17 @@ namespace RestApiSample.Migrations
                     b.Property<string>("UpdatedAt")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedByAt")
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Active");
 
-                    b.ToTable("Product");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("products");
                 });
 
             modelBuilder.Entity("RestApiSample.Models.User", b =>
@@ -101,7 +104,7 @@ namespace RestApiSample.Migrations
                     b.Property<string>("UpdatedAt")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedByAt")
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -112,7 +115,7 @@ namespace RestApiSample.Migrations
                     b.HasIndex("Password")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
@@ -139,25 +142,32 @@ namespace RestApiSample.Migrations
                     b.Property<string>("UpdatedAt")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UpdatedByAt")
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
-                    b.ToTable("WareHouse");
+                    b.ToTable("warehouse");
                 });
 
             modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
                 {
                     b.HasOne("RestApiSample.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                        .WithOne("WareHouse")
+                        .HasForeignKey("RestApiSample.Models.WareHouse", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("RestApiSample.Models.Product", b =>
+                {
+                    b.Navigation("WareHouse")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -15,7 +15,7 @@ namespace RestApiSample.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,17 +32,17 @@ namespace RestApiSample.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdatedAt = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UpdatedByAt = table.Column<string>(type: "longtext", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_products", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -62,78 +62,85 @@ namespace RestApiSample.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdatedAt = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UpdatedByAt = table.Column<string>(type: "longtext", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_users", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "WareHouse",
+                name: "warehouse",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedBy = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdatedAt = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UpdatedByAt = table.Column<string>(type: "longtext", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WareHouse", x => x.Id);
+                    table.PrimaryKey("PK_warehouse", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WareHouse_Product_ProductId",
+                        name: "FK_warehouse_products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_Active",
-                table: "Product",
+                name: "IX_products_Active",
+                table: "products",
                 column: "Active");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Email",
-                table: "User",
+                name: "IX_products_Name",
+                table: "products",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_Email",
+                table: "users",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Password",
-                table: "User",
+                name: "IX_users_Password",
+                table: "users",
                 column: "Password",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_WareHouse_ProductId",
-                table: "WareHouse",
-                column: "ProductId");
+                name: "IX_warehouse_ProductId",
+                table: "warehouse",
+                column: "ProductId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "User");
+                name: "users");
 
             migrationBuilder.DropTable(
-                name: "WareHouse");
+                name: "warehouse");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "products");
         }
     }
 }

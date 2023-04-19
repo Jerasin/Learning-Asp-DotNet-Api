@@ -1,7 +1,7 @@
-using System.Net;
-using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestApiSample.Interfaces;
+using RestApiSample.Middleware;
 using RestApiSample.Models;
 using RestApiSample.Services;
 
@@ -9,12 +9,11 @@ namespace RestApiSample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductController : ControllerBase
+public class ProductController : BaseController
 {
 
     private readonly ILogger<UserController> _logger;
     private readonly ProductService _productService;
-
 
     public ProductController(ILogger<UserController> logger, ProductService productService)
     {
@@ -24,28 +23,22 @@ public class ProductController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult Post([FromBody] Product product)
+    public async Task<IActionResult> Post([FromForm] ProductDto productDto)
     {
-        // _users.InsertOne(user);
-        _productService.createProduct(product);
 
-        return Created("", product);
+        var email = getJwtPayload("email");
+
+        await _productService.createProduct(email, productDto);
+
+        return Created("", productDto);
     }
 
     [HttpGet]
-    [Authorize]
-    public Object Get()
+    [CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
+    public IActionResult Get()
     {
         var products = _productService.getProducts();
-
-        // var test = new
-        // {
-        //     status = "444"
-        // };
-
-        // return test;
-
-        return Ok(products);
+        return products.GetActionResult();
     }
 
     [HttpGet("{id:int}")]
@@ -53,32 +46,16 @@ public class ProductController : ControllerBase
     public IActionResult GetById(int id)
     {
         var product = _productService.getProduct(id);
-
-        if (product is null)
-        {
-            return NotFound(product);
-        }
-
-        return Ok(product);
+        return product.GetActionResult();
     }
 
     [HttpPut("{id:int}")]
     [Authorize]
-    public async Task<IActionResult> Put(int id, [FromBody] Product product)
+    public async Task<IActionResult> Put(int id, [FromForm] UpdateProductDto updateProductDto)
     {
-        // var findUser = _users.AsQueryable().FirstOrDefault(user => user.id == id);
-
-        // if (findUser == null) return null;
-
-        // findUser = user;
-        // await _users.UpdateOneAsync(user => user.id == id, findUser);
-
-        // return findUser;
-
-
-        await _productService.updateProduct(id, product);
-
-        return Ok(product);
+        var email = getJwtPayload("email");
+        var result = await _productService.updateProduct(id, email, updateProductDto);
+        return result.GetActionResult();
     }
 
     [HttpDelete("{id:int}")]
@@ -86,12 +63,6 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> delete(int id)
     {
         var deleteUser = await _productService.deleteProduct(id);
-
-        if (deleteUser is null)
-        {
-            return NotFound();
-        }
-
-        return Ok();
+        return deleteUser.GetActionResult();
     }
 }

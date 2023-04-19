@@ -45,7 +45,7 @@ public class WareHouseController : ControllerBase
 
         // return test;
 
-        return Ok(wareHouses);
+        return wareHouses.GetActionResult();
     }
 
     [HttpGet("{id:int}")]

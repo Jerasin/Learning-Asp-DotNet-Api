@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace RestApiSample.Models
 {
     [Index(nameof(Active))]
+    [Index(nameof(Name), IsUnique = true)]
+    [Table("products")]
     public class Product : Base
     {
 
@@ -23,6 +26,7 @@ namespace RestApiSample.Models
 
         public bool Active { get; set; } = true;
 
-        // public virtual WareHouse WareHouse { get; set; } = null!;
+        [JsonIgnore]
+        public virtual WareHouse WareHouse { get; set; } = null!;
     }
 }
