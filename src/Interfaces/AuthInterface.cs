@@ -1,19 +1,30 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using RestApiSample.Models;
 
 namespace RestApiSample.Interfaces
 {
 
     public class ILogin
     {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
+
+    public class IRegister
+    {
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+
+        public string Address { get; set; } = null!;
+
     }
 
     public interface IAuthService
     {
-        public IActionResult test([FromBody] ILogin user);
+        public IFormatResponseService Login([FromBody] ILogin user);
 
-        public Object? createToken();
+        // private string createToken(User user);
 
     }
 

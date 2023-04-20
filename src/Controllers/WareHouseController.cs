@@ -2,6 +2,8 @@ using System.Net;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestApiSample.Interfaces;
+using RestApiSample.Middleware;
 using RestApiSample.Models;
 using RestApiSample.Services;
 
@@ -9,7 +11,7 @@ namespace RestApiSample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WareHouseController : ControllerBase
+public class WareHouseController : BaseController
 {
 
 
@@ -22,18 +24,17 @@ public class WareHouseController : ControllerBase
         _wareHouseService = wareHouseService;
     }
 
-    [HttpPost]
-    [Authorize]
-    public IActionResult Post([FromBody] WareHouse wareHouse)
+    [HttpPost, CustomAuthorizeAttribute(Roles.Admin)]
+    public async Task<IActionResult> Post([FromBody] IWareHouse wareHouse)
     {
         // _users.InsertOne(user);
-        _wareHouseService.createWareHouse(wareHouse);
+        var email = getJwtPayload("email");
+        var result = await _wareHouseService.createWareHouse(email, wareHouse);
 
-        return Created("", wareHouse);
+        return result.GetActionResult();
     }
 
-    [HttpGet]
-    [Authorize]
+    [HttpGet, CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public Object Get()
     {
         var wareHouses = _wareHouseService.getWareHouses();
@@ -48,8 +49,7 @@ public class WareHouseController : ControllerBase
         return wareHouses.GetActionResult();
     }
 
-    [HttpGet("{id:int}")]
-    [Authorize]
+    [HttpGet("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public IActionResult GetById(int id)
     {
         // return _users.AsQueryable().FirstOrDefault(user => user.id == id);
@@ -63,8 +63,7 @@ public class WareHouseController : ControllerBase
         return Ok(wareHouse);
     }
 
-    [HttpPut("{id:int}")]
-    [Authorize]
+    [HttpPut("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public async Task<IActionResult> Put(int id, [FromBody] WareHouse wareHouse)
     {
         // var findUser = _users.AsQueryable().FirstOrDefault(user => user.id == id);
@@ -82,7 +81,7 @@ public class WareHouseController : ControllerBase
         return Ok(wareHouse);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}"), CustomAuthorizeAttribute(Roles.Admin)]
     [Authorize]
     public async Task<IActionResult> delete(int id)
     {
@@ -96,8 +95,7 @@ public class WareHouseController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("product")]
-    [Authorize]
+    [HttpGet("product"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public IActionResult wareHouseProducts()
     {
         var wareHouseProducts = _wareHouseService.WareHouseProducts();

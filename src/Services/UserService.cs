@@ -1,6 +1,7 @@
 using AuthenticationPlugin;
 using RestApiSample.Models;
 using RestApiSample.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace RestApiSample.Services
 {
@@ -8,11 +9,12 @@ namespace RestApiSample.Services
     public class UserService : IUserService
     {
         private readonly ApiDbContext _dbContext;
+        private readonly FormatResponseService _formatResponseService;
 
-        public UserService(ApiDbContext dbContext)
+        public UserService(ApiDbContext dbContext, FormatResponseService formatResponseService)
         {
             _dbContext = dbContext;
-
+            _formatResponseService = formatResponseService;
 
         }
 
@@ -39,8 +41,17 @@ namespace RestApiSample.Services
             Console.WriteLine("initUserAdmin is Running...");
         }
 
-        public int createUser(User user)
+        public IFormatResponseService createUser(User user)
         {
+            bool isEmail = Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+            // _users.InsertOne(user);
+
+            if (!isEmail)
+            {
+                _formatResponseService._status = DefaultStatus.BadRequest;
+                _formatResponseService._value = null;
+                return _formatResponseService;
+            }
 
             string hashed = SecurePasswordHasherHelper.Hash(user.Password);
 
@@ -58,41 +69,123 @@ namespace RestApiSample.Services
 
             _dbContext.Add(user);
             var saveUser = _dbContext.SaveChanges();
-            return saveUser;
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = saveUser;
+            return _formatResponseService;
         }
 
-        public List<User> getUsers()
+        public async Task<IFormatResponseService> createUser(string email, IUser user)
+        {
+            bool isEmail = Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+            // _users.InsertOne(user);
+
+            if (!isEmail)
+            {
+                _formatResponseService._status = DefaultStatus.BadRequest;
+                _formatResponseService._value = null;
+                return _formatResponseService;
+            }
+
+            string hashed = SecurePasswordHasherHelper.Hash(user.Password);
+
+            var createUser = new User
+            {
+                Email = user.Email,
+                Password = hashed,
+                Role = Roles.Admin.ToString(),
+                Address = user.Address,
+                CreatedBy = email
+            };
+
+
+            _dbContext.Add(createUser);
+            var saveUser = await _dbContext.SaveChangesAsync();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = saveUser;
+            return _formatResponseService;
+        }
+
+        public async Task<IFormatResponseService> createUser(IRegister user)
+        {
+            bool isEmail = Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+            // _users.InsertOne(user);
+
+            if (!isEmail)
+            {
+                _formatResponseService._status = DefaultStatus.BadRequest;
+                _formatResponseService._value = null;
+                return _formatResponseService;
+            }
+
+            string hashed = SecurePasswordHasherHelper.Hash(user.Password);
+
+            var createUser = new User
+            {
+                Email = user.Email,
+                Password = hashed,
+                Role = Roles.User.ToString(),
+                Address = user.Address,
+                CreatedBy = user.Email
+            };
+
+
+            _dbContext.Add(createUser);
+            var saveUser = await _dbContext.SaveChangesAsync();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = saveUser;
+            return _formatResponseService;
+        }
+
+        public IFormatResponseService getUsers()
         {
 
-            return _dbContext.User.ToList();
+            var users = _dbContext.User.ToList();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = users;
+            return _formatResponseService;
         }
 
-        public User? getUser(int id)
+        public async Task<IFormatResponseService> getUser(int id)
         {
-            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.Id == id);
+            var result = await _dbContext.User.FindAsync(id);
 
-            return result;
+            if (result is null)
+            {
+                _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
+                return _formatResponseService;
+            }
+
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = result;
+            return _formatResponseService;
         }
 
-        public User? getUserByEmail(string email)
+        public IFormatResponseService getUserByEmail(string email)
         {
             var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.Email == email);
 
             if (result is null)
             {
-                return null;
+                _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
+                return _formatResponseService;
             }
 
-            return result;
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = result;
+            return _formatResponseService;
         }
 
-        public async Task<int?> updateUser(int id, User user)
+        public async Task<IFormatResponseService?> updateUser(int id, User user)
         {
-            var result = _dbContext.User.AsQueryable().FirstOrDefault(user => user.Id == id);
+            var result = await _dbContext.User.FindAsync(id);
 
             if (result is null)
             {
-                return null;
+                _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
+                return _formatResponseService;
             }
 
             result.Email = user.Email;
@@ -100,9 +193,10 @@ namespace RestApiSample.Services
             result.Active = user.Active;
             result.Role = user.Role;
 
-            return await _dbContext.SaveChangesAsync();
-
-
+            var updateUser = await _dbContext.SaveChangesAsync();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = updateUser;
+            return _formatResponseService;
         }
 
         public async Task<int?> deleteUser(int id)

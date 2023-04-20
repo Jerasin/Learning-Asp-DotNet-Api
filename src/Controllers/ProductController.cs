@@ -22,35 +22,32 @@ public class ProductController : BaseController
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize, CustomAuthorizeAttribute(Roles.Admin)]
     public async Task<IActionResult> Post([FromForm] ProductDto productDto)
     {
 
         var email = getJwtPayload("email");
 
-        await _productService.createProduct(email, productDto);
+        var result = await _productService.createProduct(email, productDto);
 
-        return Created("", productDto);
+        return result.GetActionResult();
     }
 
-    [HttpGet]
-    [CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
+    [HttpGet, CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public IActionResult Get()
     {
         var products = _productService.getProducts();
         return products.GetActionResult();
     }
 
-    [HttpGet("{id:int}")]
-    [Authorize]
-    public IActionResult GetById(int id)
+    [HttpGet("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
+    public async Task<IActionResult> GetById(int id)
     {
-        var product = _productService.getProduct(id);
+        var product = await _productService.getProduct(id);
         return product.GetActionResult();
     }
 
-    [HttpPut("{id:int}")]
-    [Authorize]
+    [HttpPut("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     public async Task<IActionResult> Put(int id, [FromForm] UpdateProductDto updateProductDto)
     {
         var email = getJwtPayload("email");
@@ -58,8 +55,7 @@ public class ProductController : BaseController
         return result.GetActionResult();
     }
 
-    [HttpDelete("{id:int}")]
-    [Authorize]
+    [HttpDelete("{id:int}"), CustomAuthorizeAttribute(Roles.Admin)]
     public async Task<IActionResult> delete(int id)
     {
         var deleteUser = await _productService.deleteProduct(id);

@@ -1,15 +1,17 @@
-using System.Net;
+using RestApiSample.Middleware;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestApiSample.Models;
 using RestApiSample.Services;
+using RestApiSample.Interfaces;
+
 
 namespace RestApiSample.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
 
     private readonly ILogger<UserController> _logger;
@@ -25,48 +27,34 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost]
-    [Authorize]
-    public IActionResult Post([FromBody] User user)
+    [HttpPost, CustomAuthorizeAttribute(Roles.Admin)]
+    public async Task<IActionResult> Post([FromBody] IUser user)
     {
-        // _users.InsertOne(user);
-        _userService.createUser(user);
 
-        return Created("", user);
+        var email = getJwtPayload("email");
+        var result = await _userService.createUser(email, user);
+
+        return result.GetActionResult();
     }
 
-    [HttpGet]
-    [Authorize]
-    public Object Get()
+    [HttpGet, CustomAuthorizeAttribute(Roles.Admin)]
+    public IActionResult Get()
     {
         var users = _userService.getUsers();
-
-        // var test = new
-        // {
-        //     status = "444"
-        // };
-
-        // return test;
-
-        return Ok(users);
+        return users.GetActionResult();
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     [Authorize]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         // return _users.AsQueryable().FirstOrDefault(user => user.id == id);
-        var user = _userService.getUser(id);
+        var result = await _userService.getUser(id);
 
-        if (user is null)
-        {
-            return NotFound(user);
-        }
-
-        return Ok(user);
+        return result.GetActionResult();
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:int}"), CustomAuthorizeAttribute(Roles.Admin | Roles.User)]
     [Authorize]
     public async Task<IActionResult> Put(int id, [FromBody] User user)
     {
@@ -85,7 +73,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}"), CustomAuthorizeAttribute(Roles.Admin)]
     [Authorize]
     public async Task<IActionResult> delete(int id)
     {

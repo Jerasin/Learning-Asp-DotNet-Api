@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RestApiSample.Interfaces;
 
 namespace RestApiSample.Services
 {
@@ -17,7 +18,7 @@ namespace RestApiSample.Services
         public string status { get; set; } = null!;
     }
 
-    public class FormatResponseService : ControllerBase
+    public class FormatResponseService : ControllerBase, IFormatResponseService
     {
 
         public object? _value { get; set; }
@@ -59,6 +60,7 @@ namespace RestApiSample.Services
                     return StatusCode(500);
             }
         }
+
     }
 
 }

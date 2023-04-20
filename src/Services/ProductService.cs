@@ -96,7 +96,6 @@ namespace RestApiSample.Services
             return saveProduct;
         }
 
-
         public string? uploadImgProduct(ProductDto productDto)
         {
             var imgName = productDto.Name + ".png";
@@ -190,6 +189,33 @@ namespace RestApiSample.Services
         }
 
 
+        public void deleteImgProduct(string imgName)
+        {
+            try
+            {
+
+                if (string.IsNullOrWhiteSpace(_environment.WebRootPath))
+                {
+                    _environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "src/wwwroot/upload/");
+                }
+
+                var rootPathImage = _environment.WebRootPath;
+
+                var path = rootPathImage + imgName;
+
+
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+            catch (Exception error)
+            {
+                throw new IOException("Failed to delete file: '{0}'.", error);
+            }
+        }
+
+
         public FormatResponseService getProducts()
         {
 
@@ -202,13 +228,14 @@ namespace RestApiSample.Services
             return _formatResponseService;
         }
 
-        public FormatResponseService getProduct(int id)
+        public async Task<FormatResponseService> getProduct(int id)
         {
-            var product = _dbContext.Product.AsQueryable().FirstOrDefault(item => item.Id == id);
+            var product = await _dbContext.Product.FindAsync(id);
 
             if (product is null)
             {
                 _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
                 return _formatResponseService;
             }
 
@@ -225,6 +252,7 @@ namespace RestApiSample.Services
             if (result is null)
             {
                 _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
                 return _formatResponseService;
             }
 
@@ -240,6 +268,7 @@ namespace RestApiSample.Services
             string? imgName = null;
             if (updateProductDto?.Img?.Length > 0)
             {
+                updateProductDto.Name = updateProductDto.Name ?? result.Name;
                 imgName = uploadImgProduct(updateProductDto);
 
                 if (imgName != null)
@@ -262,11 +291,18 @@ namespace RestApiSample.Services
             if (product is null)
             {
                 _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
                 return _formatResponseService;
             }
 
             _dbContext.Remove(product);
             var result = await _dbContext.SaveChangesAsync();
+
+            if (product.Img != null)
+            {
+                deleteImgProduct(product.Img);
+            }
+
             _formatResponseService._status = DefaultStatus.Success;
             _formatResponseService._value = result;
             return _formatResponseService;

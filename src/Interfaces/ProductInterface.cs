@@ -44,7 +44,7 @@ namespace RestApiSample.Interfaces
 
         public FormatResponseService getProducts();
 
-        public FormatResponseService getProduct(int id);
+        public Task<FormatResponseService> getProduct(int id);
 
         public Task<FormatResponseService> updateProduct(int id, string email, UpdateProductDto updateProductDto);
 
@@ -53,5 +53,7 @@ namespace RestApiSample.Interfaces
         public string? uploadImgProduct(ProductDto productDto);
 
         public string? uploadImgProduct(UpdateProductDto updateProductDto);
+
+        public void deleteImgProduct(string imgName);
     }
 }

@@ -11,37 +11,45 @@ using RestApiSample.Models;
 namespace RestApiSample.Services
 {
 
-    public class AuthCustomService
+    public class AuthCustomService : IAuthService
     {
 
         private readonly UserService _userService;
         private IConfiguration _configuration;
+        private readonly FormatResponseService _formatResponseService;
 
 
-
-        public AuthCustomService(UserService userService, IConfiguration configuration)
+        public AuthCustomService(UserService userService, IConfiguration configuration, FormatResponseService formatResponseService)
         {
             _userService = userService;
             _configuration = configuration;
+            _formatResponseService = formatResponseService;
         }
 
-        public Object? Login([FromBody] ILogin user)
+        public IFormatResponseService Login([FromBody] ILogin user)
         {
             var getUser = _userService.getUserByEmail(user.Email);
+            var result = getUser;
 
-            if (getUser is null)
+            if (result.getObject().status != DefaultStatus.Success.ToString())
             {
-                return null;
+                result.getObject().value = null;
+                return result;
             }
 
-            if (!SecurePasswordHasherHelper.Verify(user.Password, getUser.Password))
+            var findUser = getUser.getObject().value as User;
+            if (findUser == null || !SecurePasswordHasherHelper.Verify(user.Password, findUser.Password))
             {
-                return null;
+                _formatResponseService._status = DefaultStatus.BadRequest;
+                _formatResponseService._value = null;
+                return _formatResponseService;
             }
 
-            var jwt = createToken(getUser);
+            var jwt = createToken(findUser);
 
-            return new { token = jwt };
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = new { token = jwt };
+            return _formatResponseService;
         }
 
 
@@ -67,6 +75,11 @@ namespace RestApiSample.Services
         }
 
 
+        public async Task<IFormatResponseService> register(IRegister user)
+        {
+            var createUser = await _userService.createUser(user);
+            return createUser;
+        }
     }
 
 

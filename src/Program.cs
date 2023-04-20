@@ -41,6 +41,7 @@ builder.Services.AddScoped<AuthCustomService, AuthCustomService>();
 builder.Services.AddScoped<FormatResponseService, FormatResponseService>();
 
 
+
 Console.WriteLine("configuration [{0}]", configuration["AppSettings:Tokens:Issuer"]);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

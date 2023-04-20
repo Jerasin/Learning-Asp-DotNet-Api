@@ -1,21 +1,34 @@
+using System.ComponentModel.DataAnnotations;
 using RestApiSample.Models;
 
 namespace RestApiSample.Interfaces
 {
-    interface IUserService
+    public class IUser
+    {
+        [EmailAddress(ErrorMessage = "The email address is not valid")]
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+    }
+
+    public interface IUserService
     {
 
         public void initUserAdmin();
 
-        public int createUser(User user);
+        public IFormatResponseService createUser(User user);
 
-        public List<User> getUsers();
+        public Task<IFormatResponseService> createUser(string email, IUser user);
 
-        public User? getUser(int id);
+        public Task<IFormatResponseService> createUser(IRegister user);
 
-        public User? getUserByEmail(string email);
+        public IFormatResponseService getUsers();
 
-        public Task<int?> updateUser(int id, User user);
+        public Task<IFormatResponseService> getUser(int id);
+
+        public IFormatResponseService getUserByEmail(string email);
+
+        public Task<IFormatResponseService?> updateUser(int id, User user);
 
         public Task<int?> deleteUser(int id);
     }

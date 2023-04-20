@@ -27,21 +27,20 @@ namespace RestApiSample.Controllers
             _authService = authCustomService;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public IActionResult Login([FromBody] ILogin user)
         {
             var result = _authService.Login(user);
-
-            Console.WriteLine("test = ${0}", result);
-
-            if (result is null)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result);
+            return result.GetActionResult();
         }
 
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] IRegister user)
+        {
+            var result = await _authService.register(user);
+            return result.GetActionResult();
+        }
 
     }
 

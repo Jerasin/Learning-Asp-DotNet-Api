@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using RestApiSample.Interfaces;
 using RestApiSample.Models;
 
 namespace RestApiSample.Services
 {
-    public class WareHouseService
+    public class WareHouseService : IWareHouseService
     {
 
         private readonly ApiDbContext _dbContext;
@@ -44,6 +45,32 @@ namespace RestApiSample.Services
             _dbContext.Add(wareHouse);
             var saveWareHouse = _dbContext.SaveChanges();
             return saveWareHouse;
+        }
+
+        public async Task<IFormatResponseService> createWareHouse(string email, IWareHouse wareHouse)
+        {
+            var product = await _dbContext.Product.FindAsync(wareHouse.ProductId);
+
+            if (product is null)
+            {
+                _formatResponseService._status = DefaultStatus.NotFound;
+                _formatResponseService._value = null;
+                return _formatResponseService;
+            }
+
+            var createWareHouse = new WareHouse
+            {
+                Amount = wareHouse.Amount,
+                ProductId = wareHouse.ProductId,
+                Product = product,
+                CreatedBy = email
+            };
+
+            _dbContext.Add(createWareHouse);
+            var saveWareHouse = await _dbContext.SaveChangesAsync();
+            _formatResponseService._status = DefaultStatus.Success;
+            _formatResponseService._value = saveWareHouse;
+            return _formatResponseService;
         }
 
 
