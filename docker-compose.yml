@@ -1,9 +1,3 @@
-version: '3.4'
-
-networks:
-  dev:
-    driver: bridge
-
 services:
   api:
     build:
@@ -17,8 +11,6 @@ services:
         condition: service_healthy
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=api;Uid=api;Pwd=123456;
-    networks:
-      - dev
     volumes:
       - ./src:/app/src
 
@@ -44,19 +36,16 @@ services:
       interval: 10s
       timeout: 30s
       retries: 3
-    networks:
-      - dev
+
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-    networks:
-      - dev
 
-volumes:
-  db-data:
+
+
 
 
 

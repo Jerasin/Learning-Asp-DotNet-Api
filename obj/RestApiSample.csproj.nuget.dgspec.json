@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/jinyong/workspace/RestApiSample/RestApiSample.csproj": {}
+    "/home/jinyong/workspace/Learning-Asp-DotNet-Api/RestApiSample.csproj": {}
   },
   "projects": {
-    "/home/jinyong/workspace/RestApiSample/RestApiSample.csproj": {
+    "/home/jinyong/workspace/Learning-Asp-DotNet-Api/RestApiSample.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jinyong/workspace/RestApiSample/RestApiSample.csproj",
+        "projectUniqueName": "/home/jinyong/workspace/Learning-Asp-DotNet-Api/RestApiSample.csproj",
         "projectName": "RestApiSample",
-        "projectPath": "/home/jinyong/workspace/RestApiSample/RestApiSample.csproj",
+        "projectPath": "/home/jinyong/workspace/Learning-Asp-DotNet-Api/RestApiSample.csproj",
         "packagesPath": "/home/jinyong/.nuget/packages/",
-        "outputPath": "/home/jinyong/workspace/RestApiSample/obj/",
+        "outputPath": "/home/jinyong/workspace/Learning-Asp-DotNet-Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jinyong/.nuget/NuGet/NuGet.Config"

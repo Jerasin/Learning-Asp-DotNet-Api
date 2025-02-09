@@ -1,13 +1,13 @@
-using RestApiSample.Middleware;
+using RestApiSample.src.Middleware;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Models;
-using RestApiSample.Services;
-using RestApiSample.Interfaces;
+using RestApiSample.src.Models;
+using RestApiSample.src.Services;
+using RestApiSample.src.Interfaces;
 
 
-namespace RestApiSample.Controllers;
+namespace RestApiSample.src.Controllers;
 
 [ApiController]
 [Route("[controller]")]

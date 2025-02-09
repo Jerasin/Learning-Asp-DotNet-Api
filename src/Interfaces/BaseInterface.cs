@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Services;
+using RestApiSample.src.Services;
 
-namespace RestApiSample.Interfaces
+namespace RestApiSample.src.Interfaces
 {
     public interface IFormatResponseService
     {

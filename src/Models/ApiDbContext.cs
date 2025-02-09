@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace RestApiSample.Models
+namespace RestApiSample.src.Models
 {
 
 

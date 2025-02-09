@@ -1,4 +1,4 @@
-namespace RestApiSample.Services
+namespace RestApiSample.src.Services
 {
 
 }

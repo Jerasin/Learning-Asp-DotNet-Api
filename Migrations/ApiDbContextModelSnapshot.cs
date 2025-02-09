@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestApiSample.Models;
+using RestApiSample.src.Models;
 
 #nullable disable
 
@@ -18,7 +18,7 @@ namespace RestApiSample.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0-preview.2.23128.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("RestApiSample.Models.Product", b =>
+            modelBuilder.Entity("RestApiSample.src.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace RestApiSample.Migrations
                     b.ToTable("products");
                 });
 
-            modelBuilder.Entity("RestApiSample.Models.User", b =>
+            modelBuilder.Entity("RestApiSample.src.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +118,7 @@ namespace RestApiSample.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
+            modelBuilder.Entity("RestApiSample.src.Models.WareHouse", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,18 +153,18 @@ namespace RestApiSample.Migrations
                     b.ToTable("warehouse");
                 });
 
-            modelBuilder.Entity("RestApiSample.Models.WareHouse", b =>
+            modelBuilder.Entity("RestApiSample.src.Models.WareHouse", b =>
                 {
-                    b.HasOne("RestApiSample.Models.Product", "Product")
+                    b.HasOne("RestApiSample.src.Models.Product", "Product")
                         .WithOne("WareHouse")
-                        .HasForeignKey("RestApiSample.Models.WareHouse", "ProductId")
+                        .HasForeignKey("RestApiSample.src.Models.WareHouse", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("RestApiSample.Models.Product", b =>
+            modelBuilder.Entity("RestApiSample.src.Models.Product", b =>
                 {
                     b.Navigation("WareHouse")
                         .IsRequired();

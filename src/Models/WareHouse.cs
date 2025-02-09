@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace RestApiSample.Models
+namespace RestApiSample.src.Models
 {
     [Index(nameof(ProductId))]
     [Table("warehouse")]

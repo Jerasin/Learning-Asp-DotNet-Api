@@ -2,7 +2,7 @@ using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RestApiSample.Controllers
+namespace RestApiSample.src.Controllers
 {
 
     public class BaseController : ControllerBase

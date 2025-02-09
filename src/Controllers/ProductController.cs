@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Interfaces;
-using RestApiSample.Middleware;
-using RestApiSample.Models;
-using RestApiSample.Services;
+using RestApiSample.src.Interfaces;
+using RestApiSample.src.Middleware;
+using RestApiSample.src.Models;
+using RestApiSample.src.Services;
 
-namespace RestApiSample.Controllers;
+namespace RestApiSample.src.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RestApiSample.Models
+namespace RestApiSample.src.Models
 {
     public class Base
     {

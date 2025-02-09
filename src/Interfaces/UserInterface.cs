@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using RestApiSample.Models;
+using RestApiSample.src.Models;
 
-namespace RestApiSample.Interfaces
+namespace RestApiSample.src.Interfaces
 {
     public class IUser
     {

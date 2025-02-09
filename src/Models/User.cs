@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace RestApiSample.Models
+namespace RestApiSample.src.Models
 {
     [Flags]
     public enum Roles

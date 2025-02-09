@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
-using RestApiSample.Models;
+using RestApiSample.src.Models;
 
-namespace RestApiSample.Middleware
+namespace RestApiSample.src.Middleware
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {

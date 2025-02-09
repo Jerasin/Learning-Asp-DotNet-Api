@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using RestApiSample.Models;
-using RestApiSample.Services;
+using RestApiSample.src.Models;
+using RestApiSample.src.Services;
 
-namespace RestApiSample.Interfaces
+namespace RestApiSample.src.Interfaces
 {
     public class ProductDto
     {

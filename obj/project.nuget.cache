@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sQDQub8kj3Q7ETi5kbp2UpvBXzXY8Xtt5HN+3U4CSsKH4ynBdZuMdYM4V2bNtj2LtB/U+CfcdM4qmOFEUqZlrw==",
+  "dgSpecHash": "t2jR8g5vZdp6vCJ0PKid0sHV2mnoVS2wPVsJp26t535RnQf9Rhn5yab3TPfLvoYp7aOFQ5CX6Vaw3QpH01vk2g==",
   "success": true,
-  "projectFilePath": "/home/jinyong/workspace/RestApiSample/RestApiSample.csproj",
+  "projectFilePath": "/home/jinyong/workspace/Learning-Asp-DotNet-Api/RestApiSample.csproj",
   "expectedPackageFiles": [
     "/home/jinyong/.nuget/packages/aspnetcore.authentication.plugin/1.0.1/aspnetcore.authentication.plugin.1.0.1.nupkg.sha512",
     "/home/jinyong/.nuget/packages/bouncycastle.netcore/1.8.3/bouncycastle.netcore.1.8.3.nupkg.sha512",

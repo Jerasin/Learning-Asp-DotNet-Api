@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Interfaces;
+using RestApiSample.src.Interfaces;
 
-namespace RestApiSample.Services
+namespace RestApiSample.src.Services
 {
 
     public enum DefaultStatus

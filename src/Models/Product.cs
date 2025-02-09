@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace RestApiSample.Models
+namespace RestApiSample.src.Models
 {
     [Index(nameof(Active))]
     [Index(nameof(Name), IsUnique = true)]

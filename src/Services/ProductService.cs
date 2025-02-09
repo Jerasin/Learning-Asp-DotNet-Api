@@ -1,7 +1,7 @@
-using RestApiSample.Interfaces;
-using RestApiSample.Models;
+using RestApiSample.src.Interfaces;
+using RestApiSample.src.Models;
 
-namespace RestApiSample.Services
+namespace RestApiSample.src.Services
 {
     public class ProductService : IProductService
     {

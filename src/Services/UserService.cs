@@ -1,9 +1,9 @@
 using AuthenticationPlugin;
-using RestApiSample.Models;
-using RestApiSample.Interfaces;
+using RestApiSample.src.Models;
+using RestApiSample.src.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace RestApiSample.Services
+namespace RestApiSample.src.Services
 {
 
     public class UserService : IUserService

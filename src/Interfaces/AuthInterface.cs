@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Models;
+using RestApiSample.src.Models;
 
-namespace RestApiSample.Interfaces
+namespace RestApiSample.src.Interfaces
 {
 
     public class ILogin

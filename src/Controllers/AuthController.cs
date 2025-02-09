@@ -1,10 +1,10 @@
 using AuthenticationPlugin;
-using RestApiSample.Interfaces;
+using RestApiSample.src.Interfaces;
 using JsonFlatFileDataStore;
 using Microsoft.AspNetCore.Mvc;
-using RestApiSample.Services;
+using RestApiSample.src.Services;
 
-namespace RestApiSample.Controllers
+namespace RestApiSample.src.Controllers
 {
     [ApiController]
     [Route("[controller]")]
